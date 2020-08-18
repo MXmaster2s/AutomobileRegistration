@@ -14,7 +14,7 @@ DELAY="$2"
 LANGUAGE="$3"
 TIMEOUT="$4"
 VERBOSE="$5"
-: ${CHANNEL_NAME:="certificationchannel"}
+: ${CHANNEL_NAME:="registrationchannel"}
 : ${DELAY:="5"}
 : ${LANGUAGE:="node"}
 : ${TIMEOUT:="15"}
@@ -22,7 +22,7 @@ VERBOSE="$5"
 LANGUAGE=$(echo "$LANGUAGE" | tr [:upper:] [:lower:])
 COUNTER=1
 MAX_RETRY=15
-ORGS="iit mhrd upgrad"
+ORGS="partsFactory carFactory dealer"  #UPDATE REQUIRED
 
 if [ "$LANGUAGE" = "node" ]; then
   CC_SRC_PATH="/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode/"
@@ -34,15 +34,15 @@ echo "Channel name : "$CHANNEL_NAME
 . scripts/utils.sh
 
 createChannel() {
-  setGlobals 0 'iit'
+  setGlobals 0 'partsFactory'
   if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
     set -x
-    peer channel create -o orderer.certification-network.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx >&log.txt
+    peer channel create -o orderer.automobile-registration-network.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx >&log.txt
     res=$?
     set +x
   else
     set -x
-    peer channel create -o orderer.certification-network.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA >&log.txt
+    peer channel create -o orderer.automobile-registration-network.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA >&log.txt
     res=$?
     set +x
   fi
@@ -57,7 +57,7 @@ joinChannel() {
   for org in $ORGS; do
     for peer in 0 1; do
       joinChannelWithRetry $peer $org
-      echo "===================== peer${peer}.${org}.certification-network.com  joined channel '$CHANNEL_NAME' ===================== "
+      echo "===================== peer${peer}.${org}.automobile-registration-network.com  joined channel '$CHANNEL_NAME' ===================== "
       sleep $DELAY
       echo
     done
@@ -73,15 +73,15 @@ echo "Having all peers join the channel..."
 joinChannel
 
 ## Set the anchor peers for each org in the channel
-echo "Updating anchor peers for IIT..."
-updateAnchorPeers 0 'iit'
-echo "Updating anchor peers for MHRD..."
-updateAnchorPeers 0 'mhrd'
-echo "Updating anchor peers for UpGrad..."
-updateAnchorPeers 0 'upgrad'
+echo "Updating anchor peers for partsFactory..."
+updateAnchorPeers 0 'partsFactory'
+echo "Updating anchor peers for carFactory..."
+updateAnchorPeers 0 'carFactory'
+echo "Updating anchor peers for dealer..."
+updateAnchorPeers 0 'dealer'
 
 echo
-echo "========= All GOOD, Hyperledger Fabric Certification Network Is Now Up and Running! =========== "
+echo "========= All GOOD, Hyperledger Fabric Automobile Registration Network for McKinley & Rice is Now Up and Running! =========== "
 echo
 
 echo

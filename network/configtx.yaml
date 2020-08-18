@@ -2,7 +2,7 @@ Organizations:
   - &OrdererOrg
     Name: Orderer
     ID: OrdererMSP
-    MSPDir: crypto-config/ordererOrganizations/certification-network.com/msp
+    MSPDir: crypto-config/ordererOrganizations/automobile-registration-network.com/msp
     Policies:
       Readers:
         Type: Signature
@@ -14,61 +14,59 @@ Organizations:
         Type: Signature
         Rule: "OR('OrdererMSP.member')"
 
-  - &iit
-    Name: iitMSP
-    ID: iitMSP
-    MSPDir: crypto-config/peerOrganizations/iit.certification-network.com/msp
+  - &partsFactory
+    Name: partsFactoryMSP
+    ID: partsFactoryMSP
+    MSPDir: crypto-config/peerOrganizations/partsFactory.automobile-registration-network.com/msp
     Policies:
       Readers:
         Type: Signature
-        Rule: "OR('iitMSP.admin', 'iitMSP.peer', 'iitMSP.client')"
+        Rule: "OR('partsFactoryMSP.admin', 'partsFactoryMSP.peer', 'partsFactoryMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('iitMSP.admin', 'iitMSP.peer', 'iitMSP.client')"
+        Rule: "OR('partsFactoryMSP.admin', 'partsFactoryMSP.peer', 'partsFactoryMSP.client')"
       Admins:
         Type: Signature
-        Rule: "OR('iitMSP.admin', 'iitMSP.peer', 'iitMSP.client')"
+        Rule: "OR('partsFactoryMSP.admin', 'partsFactoryMSP.peer', 'partsFactoryMSP.client')"
     AnchorPeers:
-      - Host: peer0.iit.certification-network.com
+      - Host: peer0.partsFactory.automobile-registration-network.com
         Port: 7051
 
-  - &mhrd
-    Name: mhrdMSP
-    ID: mhrdMSP
-    MSPDir: crypto-config/peerOrganizations/mhrd.certification-network.com/msp
+  - &carFactory
+    Name: carFactoryMSP
+    ID: carFactoryMSP
+    MSPDir: crypto-config/peerOrganizations/carFactory.automobile-registration-network.com/msp
     Policies:
       Readers:
         Type: Signature
-        Rule: "OR('mhrdMSP.admin', 'mhrdMSP.peer', 'mhrdMSP.client')"
+        Rule: "OR('carFactoryMSP.admin', 'carFactoryMSP.peer', 'carFactoryMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('mhrdMSP.admin', 'mhrdMSP.peer', 'mhrdMSP.client')"
+        Rule: "OR('carFactoryMSP.admin', 'carFactoryMSP.peer', 'carFactoryMSP.client')"
       Admins:
         Type: Signature
-        Rule: "OR('mhrdMSP.admin', 'mhrdMSP.peer', 'mhrdMSP.client')"
+        Rule: "OR('carFactoryMSP.admin', 'carFactoryMSP.peer', 'carFactoryMSP.client')"
     AnchorPeers:
-      - Host: peer0.mhrd.certification-network.com
+      - Host: peer0.carFactoryMSP.automobile-registration-network.com
         Port: 9051
-
-  - &upgrad
-    Name: upgradMSP
-    ID: upgradMSP
-    MSPDir: crypto-config/peerOrganizations/upgrad.certification-network.com/msp
+        
+  - &dealer
+    Name: dealerMSP
+    ID: dealerMSP
+    MSPDir: crypto-config/peerOrganizations/dealer.automobile-registration-network.com/msp
     Policies:
       Readers:
         Type: Signature
-        Rule: "OR('upgradMSP.admin', 'upgradMSP.peer', 'upgradMSP.client')"
+        Rule: "OR('dealerMSP.admin', 'dealerMSP.peer', 'dealerMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('upgradMSP.admin', 'upgradMSP.peer', 'upgradMSP.client')"
+        Rule: "OR('dealerMSP.admin', 'dealerMSP.peer', 'dealerMSP.client')"
       Admins:
         Type: Signature
-        Rule: "OR('upgradMSP.admin', 'upgradMSP.peer', 'upgradMSP.client')"
+        Rule: "OR('dealerMSP.admin', 'dealerMSP.peer', 'dealerMSP.client')"
     AnchorPeers:
-      - Host: peer0.upgrad.certification-network.com
+      - Host: peer0.dealer.automobile-registration-network.com
         Port: 11051
-
-
 
 #Capabilities
 
@@ -106,7 +104,7 @@ Application: &ApplicationDefaults
 Orderer: &OrdererDefaults
   OrdererType: solo
   Addresses:
-    - orderer.certification-network.com:7050
+    - orderer.automobile-registration-network.com:7050
   BatchTimeout: 2s
   BatchSize:
     MaxMessageCount: 10
@@ -161,19 +159,19 @@ Profiles:
       Capabilities:
         <<: *OrdererCapabilities
     Consortiums:
-      CertificationConsortium:
+      AutomobileConsortium:
         Organizations:
-          - *iit
-          - *mhrd
-          - *upgrad
+          - *partsFactory
+          - *carFactory
+          - *dealer
 
-  CertificationChannel:
+  RegistrationChannel:
     Consortium: CertificationConsortium
     Application:
       <<: *ApplicationDefaults
       Organizations:
-        - *iit
-        - *mhrd
-        - *upgrad
+        - *partsFactory
+        - *carFactory
+        - *dealer
       Capabilities:
         <<: *ApplicationCapabilities

@@ -1,25 +1,25 @@
 OrdererOrgs:
   - Name: Orderer
-    Domain: certification-network.com
+    Domain: automobile-registration-network.com
     Specs:
       - Hostname: orderer
 PeerOrgs:
- - Name: iit
-   Domain: iit.certification-network.com
+ - Name: partsFactory
+   Domain: partsFactory.automobile-registration-network.com
    EnableNodeOUs: true
    Template:
       Count: 2
    Users:
       Count: 1
- - Name: mhrd
-   Domain: mhrd.certification-network.com
+ - Name: carFactory
+   Domain: carFactory.automobile-registration-network.com
    EnableNodeOUs: true
    Template:
       Count: 2
    Users:
       Count: 1
- - Name: upgrad
-   Domain: upgrad.certification-network.com
+ - Name: dealer
+   Domain: dealer.automobile-registration-network.com
    EnableNodeOUs: true
    Template:
       Count: 2
